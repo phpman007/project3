@@ -11,22 +11,22 @@
                     </a>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="booking-report.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-calendar-check"></i> <span> การจองห้องพัก </span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="energy-report.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-printer"></i> <span> การใช้น้ำใช้ไฟฟ้า </span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="payment1-report.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-bank"></i><span> การโอนเงินมัดค่าจำ </span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="payment2-report.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-bank"></i><span> การโอนเงินค่าเช่า </span>
                     </a>
                 </li>
