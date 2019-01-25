@@ -3,7 +3,7 @@
         <!--- Divider -->
         <div id="sidebar-menu">
             <ul>
-                <li class="menu-title">Main</li>
+                <li class="menu-title">เมนูหลัก</li>
 
                 <li>
                     <a href="dashboard.php" class="waves-effect waves-primary">
@@ -36,22 +36,22 @@
                     </a>
                 </li>
                 <li class="has_sub">
-                    <a href="javascript:void(0);" class="waves-effect waves-primary subdrop">
+                    <a href="javascript:void(0);" class="waves-effect waves-primary ">
                         <i class="mdi mdi-home-modern"></i><span> ห้องพัก </span> <span class="menu-arrow"></span>
                     </a>
                     <ul class="list-unstyled" style="display: block;">
-                        <li><a href="apps-kanban.html">จัดการห้องพัก</a></li>
-                        <li><a href="apps-kanban.html">จัดการค่าน้ำ ค่าไฟฟ้า</a></li>
-                        <li><a href="apps-kanban.html">จัดการประเภทห้องพัก</a></li>
+                        <li><a href="rooms-manager.php">จัดการห้องพัก</a></li>
+                        <!-- <li><a href="electic-manager.php">จัดการค่าน้ำ ค่าไฟฟ้า</a></li> -->
+                        <li><a href="room-type.php">จัดการประเภทห้องพัก</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="report-rent-room.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-printer"></i><span> รายงานสัญญาเช่า </span>
                     </a>
                 </li>
                 <li>
-                    <a href="index.html" class="waves-effect waves-primary">
+                    <a href="report-elect.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-printer"></i><span> รายงานค่าน้ำ ค่าไฟฟ้า </span>
                     </a>
                 </li>

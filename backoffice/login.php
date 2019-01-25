@@ -7,6 +7,7 @@ if ($_SESSION['member']) {
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $sql = "SELECT * FROM tbl_users
     WHERE username = '{$_POST['username']}'
+    AND type = 'admin'
     AND password = '{$_POST['password']}'";
 
 

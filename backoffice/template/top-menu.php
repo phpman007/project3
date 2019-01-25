@@ -3,7 +3,7 @@
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="text-center">
-            <a href="index.html" class="logo"><i class="mdi mdi-radar"></i> <span>Minton</span></a>
+            <a href="index.php" class="logo"><span>Room</span></a>
         </div>
     </div>
 
