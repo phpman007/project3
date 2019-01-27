@@ -13,6 +13,7 @@ $member = $_SESSION['member'];
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
     <meta name="author" content="Coderthemes">
@@ -26,6 +27,6 @@ $member = $_SESSION['member'];
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
-
+    <link rel="stylesheet" href="assets/summernote/summernote.css" />
     <script src="assets/js/modernizr.min.js"></script>
 </head>

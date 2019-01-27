@@ -196,7 +196,7 @@
 										<li><i class="fa fa-star" aria-hidden="true"></i></li>
 									</ul>
 								</div>
-								<div class="testimonial_text">“ Praesent fermentum ligula in dui imperdiet, vel tempus nulla ultricies. Phasellus at commodo ligula. Nullam molestie volutpat sapien, a dignissim tortor laoreet quis.</div>
+								
 								<div class="testimonial_author d-flex flex-row align-items-center justify-content-start">
 									<div class="testimonial_author_image"><img src="assets/images/testimonial.png" alt=""></div>
 									<div class="testimonial_author_name"><a href="#">Michael Smith</a><span>, Client</span></div>

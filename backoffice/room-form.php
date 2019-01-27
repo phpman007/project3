@@ -142,7 +142,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รายละเอียด</label>
                           <div class="col-10">
-                            <textarea class="form-control" name="name" rows="8" cols="80"></textarea>
+                            <textarea class="form-control summernote" name="name" rows="8" cols="80"></textarea>
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -233,22 +233,8 @@ $result = $con->query($sql);
   </script>
 
   <!-- Plugins  -->
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/popper.min.js"></script><!-- Popper for Bootstrap -->
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/detect.js"></script>
-  <script src="assets/js/fastclick.js"></script>
-  <script src="assets/js/jquery.slimscroll.js"></script>
-  <script src="assets/js/jquery.blockUI.js"></script>
-  <script src="assets/js/waves.js"></script>
-  <script src="assets/js/wow.min.js"></script>
-  <script src="assets/js/jquery.nicescroll.js"></script>
-  <script src="assets/js/jquery.scrollTo.min.js"></script>
-  <script src="../plugins/switchery/switchery.min.js"></script>
 
-  <!-- Custom main Js -->
-  <script src="assets/js/jquery.core.js"></script>
-  <script src="assets/js/jquery.app.js"></script>
+    <?php include 'template/js.php'; ?>
 
 </body>
 </html>
