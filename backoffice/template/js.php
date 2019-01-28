@@ -18,15 +18,23 @@
 
 <script type="text/javascript">
     $(function() {
-        $('.summernote').summernote({
+        $('#summernote-1').summernote({
             height: 300,
             callbacks: {
                 onImageUpload: function(files) {
-                    sendFile(files[0]);
+                    sendFile(files[0], '#summernote-1');
                 }
             }
         });
-        function sendFile(file, editor, welEditable) {
+        $('#summernote-2').summernote({
+            height: 300,
+            callbacks: {
+                onImageUpload: function(files) {
+                    sendFile(files[0], '#summernote-2');
+                }
+            }
+        });
+        function sendFile(file, editor) {
             data = new FormData();
             data.append("file", file);//You can append as many data as you want. Check mozilla docs for this
             $.ajax({
@@ -37,7 +45,7 @@
                 contentType: false,
                 processData: false,
                 success: function(url) {
-                    $('#summernote').summernote('editor.insertImage', url);
+                    $(editor).summernote('editor.insertImage', url);
                 }
             });
         }

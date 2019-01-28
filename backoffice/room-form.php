@@ -124,9 +124,16 @@ $result = $con->query($sql);
                       <form class="form-horizontal" role="form" method="POST">
 
                         <div class="form-group row">
-                          <label class="col-2 col-form-label">รูปห้อง</label>
+                          <label class="col-2 col-form-label">รูปหน้าปกห้อง</label>
                           <div class="col-10">
-                            <input type="file" name="name" class="form-control" placeholder="ชื่อ / เลขห้อง">
+                            <input type="file" name="name" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-2 col-form-label">รวมรูปห้อง</label>
+                          <div class="col-10">
+                            <input type="file" multiple name="album" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -142,7 +149,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รายละเอียด</label>
                           <div class="col-10">
-                            <textarea class="form-control summernote" name="name" rows="8" cols="80"></textarea>
+                            <textarea id="summernote-1" class="form-control summernote" name="name" rows="8" cols="80"></textarea>
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -150,7 +157,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">หมายเหตุ</label>
                           <div class="col-10">
-                              <textarea class="form-control" name="name" rows="8" cols="80"></textarea>
+                              <textarea id="summernote-2" class="form-control summernote" name="name" rows="8" cols="80"></textarea>
                             </div>
                         </div>
                         <!-- end Lastname -->
