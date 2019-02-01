@@ -8,61 +8,142 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
   // Edit Action
   if ($_GET['action'] == 'edit' && !empty($_GET['uid'])) {
-    $sql = sprintf('SELECT * FROM type_room WHERE id = \'%s\'', $_GET['uid']);
+    $sql = sprintf('SELECT * FROM rooms WHERE id = \'%s\'', $_GET['uid']);
 
     $result = $con->query($sql)->fetch_object();
 
-    // Redirect
-    // header( "location: room-type.php");
-    // exit(0);
   }
 
   // Delete Action
   if ($_GET['action'] == 'delete' && !empty($_GET['uid'])) {
-    $sql = sprintf('DELETE FROM type_room WHERE id = \'%s\'', $_GET['uid']);
+    $sql = sprintf('DELETE FROM rooms WHERE id = \'%s\'', $_GET['uid']);
 
     $result = $con->query($sql);
 
     // Redirect
-    header( "location: room-type.php");
+    header( "location: rooms-manager.php");
     exit(0);
   }
 }
 
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-  if ($_GET['action'] == "edit" && !empty($_GET['uid']) ) {
-    echo $sql = sprintf("UPDATE type_room SET name='%s', price_light='%s', price_water='%s' WHERE id = '%s'",
-    $_POST['name'],
-    $_POST['price_light'],
-    $_POST['price_water'],
-    $_GET['uid']
-  );
-  } else {
 
-    $sql = sprintf('INSERT INTO type_room (name, price_light, price_water)
-    VALUES (\'%s\', \'%s\', \'%s\')',
-        $_POST['name'],
-        $_POST['price_light'],
-        $_POST['price_water']
-      );
+
+
+  if ($_GET['action'] == "edit" && !empty($_GET['uid']) ) {
+
+    // Attacement Image thumbnail
+    if ($_FILES['thumbnail']['error'] != 4) {
+
+
+      $target_dir = "uploads/rooms/";
+
+      if (!file_exists($target_dir)) {
+          mkdir($target_dir, 0777, true);
+      }
+
+      $_POST['thumbnail'] = $target_file = $target_dir . date('YmdHis').basename($_FILES["thumbnail"]["name"]);
+
+      move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $target_file);
+
+    } else {
+      $sql = sprintf("SELECT thumbnail FROM rooms WHERE id = '%s'", $_GET['uid']);
+
+      $result = $con->query($sql);
+
+      $row = $result->fetch_row();
+
+      $_POST['thumbnail'] = $row[0];
+    }
+    foreach ($_FILES['album']['tmp_name'] as $key => $value) {
+
+      if ($value['error'] != 4) {
+
+        $target_dir = "uploads/rooms/photo/";
+
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        $photo = $target_file = $target_dir . date('YmdHis').basename($_FILES['album']['name'][$key]);
+
+        move_uploaded_file($_FILES['album']['tmp_name'][$key], $target_file);
+        $sql = sprintf("INSERT INTO room_photos (destination, filename, room_id) VALUES ('%s', '%s', '%s')", $photo , basename($_FILES['album']['name'][$key]), $_GET['uid']);
+
+        $con->query($sql);
+      }
   }
 
+    $sql = sprintf("UPDATE rooms SET remark='%s', price_day='%s', price_month='%s', detail='%s', thumbnail='%s', floor='%s', room_name='%s', meter_water='%s', meter_light='%s' WHERE id = '%s'",
+    $_POST['remark'],
+    $_POST['price_day'],
+    $_POST['price_month'],
+    $_POST['detail'],
+    $_POST['thumbnail'],
+    $_POST['floor'],
+    $_POST['room_name'],
+    $_POST['meter_water'],
+    $_POST['meter_light'],
+    $_GET['uid']
+  );
+
+  } else {
+
+    // Attacement Image thumbnail
+    if ($_FILES['thumbnail']['error'] != 4) {
+      $target_dir = "uploads/rooms/";
+
+      if (!file_exists($target_dir)) {
+          mkdir($target_dir, 0777, true);
+      }
+
+      $_POST['thumbnail'] = $target_file = $target_dir . basename($_FILES["thumbnail"]["name"]);
+
+      move_uploaded_file($_FILES["thumbnail"]["tmp_name"], $target_file);
+
+    } else {
+      $_POST['thumbnail'] = '';
+    }
+
+
+    $sql = sprintf('INSERT INTO rooms (remark, price_day,price_month, detail, thumbnail, floor, room_name, meter_water, meter_light)
+    VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')',
+      $_POST['remark'],
+      $_POST['price_day'],
+      $_POST['price_month'],
+      $_POST['detail'],
+      $_POST['thumbnail'],
+      $_POST['floor'],
+      $_POST['room_name'],
+      $_POST['meter_water'],
+      $_POST['meter_light']
+      );
+
+
+  }
 
 
 $result = $con->query($sql);
 
   if ($_POST['btn-submit'] == 'save') {
-        header( "location: room-type.php" );
+
+        header( "location: rooms-manager.php" );
         exit(0);
+
   }else {
+
       if ($_GET['action'] == "edit" && !empty($_GET['uid']) ) {
-        header( "location: room-type-form.php?action=edit&uid=". $_GET['uid'] );
+
+        header( "location: room-form.php?action=edit&uid=". $_GET['uid'] );
         exit(0);
+
       } else {
-        header( "location: room-type-form.php?uid=".mysqli_insert_id($con) );
+        header( "location: room-form.php?uid=".mysqli_insert_id($con) );
         exit(0);
+
       }
+
   }
 }
 
@@ -103,7 +184,7 @@ $result = $con->query($sql);
                 <h4 class="page-title">เพิ่ม & แก้ไข ห้องพัก</h4>
                 <ol class="breadcrumb float-right">
                   <li class="breadcrumb-item"><a href="index.php">หน้าแรก</a></li>
-                  <li class="breadcrumb-item"><a href="room-type.php">จัดการห้องพัก</a></li>
+                  <li class="breadcrumb-item"><a href="rooms-manager.php">จัดการห้องพัก</a></li>
 
                   <li class="breadcrumb-item active">เพิ่ม & แก้ไข จัดการห้องพัก</li>
                 </ol>
@@ -121,19 +202,37 @@ $result = $con->query($sql);
                 <div class="row">
                   <div class="col-12">
                     <div class="p-20">
-                      <form class="form-horizontal" role="form" method="POST">
+                      <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
 
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รูปหน้าปกห้อง</label>
                           <div class="col-10">
-                            <input type="file" name="name" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
+                            <input type="file" name="thumbnail" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
+                            <?php
+                            if (!empty($result)) {
+                              if (!empty($result->thumbnail)) {
+                                echo "<a target='_blank' href='{$result->thumbnail}'>ดูรูปภาพหน้าปกห้อง</a>";
+                              }
+                            }
+                             ?>
                           </div>
                         </div>
 
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รวมรูปห้อง</label>
                           <div class="col-10">
-                            <input type="file" multiple name="album" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
+                            <input type="file" multiple name="album[]" class="form-control" placeholder="ชื่อ / เลขห้อง" accept="image/*">
+                            <?php
+                            if (!empty($result)) {
+                              $sql = sprintf("SELECT * FROM room_photos WHERE room_id = '%s'", $_GET['uid']);
+                              $photo = $con->query($sql);
+                              while ($obj = $photo->fetch_object()) {
+                                 echo "<a target='_blank' href='{$obj->destination}'>ดูรูปภาพหน้าปกห้อง | {$obj->filename}</a> | <a onclick=\"if(!confirm('ยืนยันการทำรายการ ลบข้อมูลหรือไม่')) return false\" href='delete-photo.php?uid={$obj->id}'>นำออก<a><br>";
+                              }
+
+                            }
+                             ?>
+
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -141,7 +240,15 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">ชื่อ / เลขห้อง</label>
                           <div class="col-10">
-                            <input type="text" name="name" value="<?php echo isset($result) ? $result->name : $_POST['name'] ?>" class="form-control" placeholder="ชื่อ / เลขห้อง">
+                            <input type="text" name="room_name" value="<?php echo isset($result) ? $result->room_name : $_POST['room_name'] ?>" class="form-control" placeholder="ชื่อ / เลขห้อง">
+                          </div>
+                        </div>
+                        <!-- end Lastname -->
+
+                        <div class="form-group row">
+                          <label class="col-2 col-form-label">ชั้น</label>
+                          <div class="col-10">
+                            <input type="number" name="floor" value="<?php echo isset($result) ? $result->floor : $_POST['floor'] ?>" class="form-control" placeholder="ชื่อ / เลขห้อง">
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -149,7 +256,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รายละเอียด</label>
                           <div class="col-10">
-                            <textarea id="summernote-1" class="form-control summernote" name="name" rows="8" cols="80"></textarea>
+                            <textarea class="form-control summernote" name="detail" rows="8" cols="80"><?php echo isset($result) ? $result->detail : $_POST['detail'] ?></textarea>
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -157,7 +264,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">หมายเหตุ</label>
                           <div class="col-10">
-                              <textarea id="summernote-2" class="form-control summernote" name="name" rows="8" cols="80"></textarea>
+                              <textarea id="summernote-2" class="form-control summernote" name="remark" rows="8" cols="80"><?php echo isset($result) ? $result->remark : $_POST['remark'] ?></textarea>
                             </div>
                         </div>
                         <!-- end Lastname -->
@@ -165,7 +272,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">ราคา/เดือน</label>
                           <div class="col-10">
-                            <input type="text" value="<?php echo isset($result) ? $result->price_light : $_POST['price_light'] ?>" name="price_light" class="form-control" placeholder="ค่าไฟ/หน่วย">
+                            <input type="number" value="<?php echo isset($result) ? $result->price_month : $_POST['price_month'] ?>" name="price_month" class="form-control" placeholder="ราคา/เดือน">
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -173,7 +280,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">ราคา/วัน</label>
                           <div class="col-10">
-                            <input type="text" value="<?php echo isset($result) ? $result->price_light : $_POST['price_light'] ?>" name="price_light" class="form-control" placeholder="ค่าไฟ/หน่วย">
+                            <input type="number" value="<?php echo isset($result) ? $result->price_day : $_POST['price_day'] ?>" name="price_day" class="form-control" placeholder="ราคา/วัน">
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -181,7 +288,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">จำนวนไฟ/หน่วย</label>
                           <div class="col-10">
-                            <input type="text" value="<?php echo isset($result) ? $result->price_light : $_POST['price_light'] ?>" name="price_light" class="form-control" placeholder="ค่าไฟ/หน่วย">
+                            <input type="number" value="<?php echo isset($result) ? $result->meter_light : $_POST['meter_light'] ?>" name="meter_light" class="form-control" placeholder="ค่าไฟ/หน่วย">
                           </div>
                         </div>
                         <!-- end Lastname -->
@@ -189,7 +296,7 @@ $result = $con->query($sql);
                         <div class="form-group row">
                           <label class="col-2 col-form-label">จำนวนน้ำ/หน่วย</label>
                           <div class="col-10">
-                            <input name="price_water" type="text" value="<?php echo isset($result) ? $result->price_water : $_POST['price_water'] ?>" class="form-control" placeholder="ค่าน้ำ/หน่วย">
+                            <input name="meter_water" type="number" value="<?php echo isset($result) ? $result->meter_water : $_POST['meter_water'] ?>" class="form-control" placeholder="ค่าน้ำ/หน่วย">
                           </div>
                         </div>
                         <!-- end id Card -->

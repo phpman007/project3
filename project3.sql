@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2019-01-25 19:31:18
+Date: 2019-02-01 22:08:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -69,21 +69,47 @@ CREATE TABLE `payment` (
 -- ----------------------------
 DROP TABLE IF EXISTS `rooms`;
 CREATE TABLE `rooms` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `remark` text COLLATE utf8_unicode_ci,
-  `price` int(11) DEFAULT NULL,
+  `price_month` int(11) DEFAULT NULL,
+  `price_day` int(11) DEFAULT NULL,
   `detail` text COLLATE utf8_unicode_ci,
   `thumbnail` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `flow` int(11) DEFAULT NULL,
+  `floor` int(11) DEFAULT NULL,
   `room_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `meter_water` int(11) DEFAULT NULL,
   `meter_light` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of rooms
 -- ----------------------------
+INSERT INTO `rooms` VALUES ('3', '<p>ทดสอบทดสอบทดสอบทดสอ<b>บทดสอบทดสอบทด</b>สอบทดสอบทดสอบทดสอบทดสอบทดสอบทดสอบ<br></p>', '2', '2', 'ทดสอบทดสอบทดสอบทดสอบทดสอบทดสอบทดสอบ', 'uploads/rooms/5.PNG', '2', 'ทดสอบ11', '13', '13');
+INSERT INTO `rooms` VALUES ('4', '<p>3123123123 1<b>2312321 132312312</b> 12312312</p>', '111', '2312', '12312', 'uploads/rooms/3.PNG', '2', '12321', '1', '1');
+
+-- ----------------------------
+-- Table structure for `room_photos`
+-- ----------------------------
+DROP TABLE IF EXISTS `room_photos`;
+CREATE TABLE `room_photos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `destination` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filename` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `room_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of room_photos
+-- ----------------------------
+INSERT INTO `room_photos` VALUES ('12', 'uploads/rooms/photo/201902010313413.PNG', '3.PNG', '0');
+INSERT INTO `room_photos` VALUES ('13', 'uploads/rooms/photo/201902010313414.PNG', '4.PNG', '0');
+INSERT INTO `room_photos` VALUES ('14', 'uploads/rooms/photo/201902010315442.PNG', '2.PNG', '4');
+INSERT INTO `room_photos` VALUES ('15', 'uploads/rooms/photo/201902010315443.PNG', '3.PNG', '4');
+INSERT INTO `room_photos` VALUES ('17', 'uploads/rooms/photo/201902010336332.PNG', '2.PNG', '4');
+INSERT INTO `room_photos` VALUES ('18', 'uploads/rooms/photo/20190201033810', '', '4');
+INSERT INTO `room_photos` VALUES ('19', 'uploads/rooms/photo/20190201033814', '', '4');
 
 -- ----------------------------
 -- Table structure for `tbl_users`

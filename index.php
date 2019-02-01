@@ -1,3 +1,4 @@
+<?php include "config/db.conf.php" ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +100,7 @@
 
 	<!-- Search Bar -->
 
-	<?php include "template/search-bar.php" ?>
+	<!-- <?php include "template/search-bar.php" ?> -->
 
 	<!-- Intro -->
 
@@ -196,7 +197,7 @@
 										<li><i class="fa fa-star" aria-hidden="true"></i></li>
 									</ul>
 								</div>
-								
+
 								<div class="testimonial_author d-flex flex-row align-items-center justify-content-start">
 									<div class="testimonial_author_image"><img src="assets/images/testimonial.png" alt=""></div>
 									<div class="testimonial_author_name"><a href="#">Michael Smith</a><span>, Client</span></div>

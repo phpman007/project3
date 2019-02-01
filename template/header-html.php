@@ -6,7 +6,7 @@
       <div class="logo">
         <a href="#" class="text-center">
           <div class="logo_subtitle">ห้องพัก</div>
-          <div class="logo_title">Samira</div>
+          <div class="logo_title"><?php echo __NAME__ ?></div>
           <!-- <div class="logo_stars">
             <ul class="d-flex flex-row align-items-start justfy-content-start">
               <li><i class="fa fa-star" aria-hidden="true"></i></li>
@@ -25,11 +25,11 @@
           <div class="header_inner d-flex flex-row align-items-center justify-content-start">
             <nav class="main_nav">
               <ul class="d-flex flex-row align-items-center justify-content-start">
-                <li class="active"><a href="index.html"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>หน้าแรก</span></div></a></li>
-                <li><a href="about.html"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>เกี่ยวกับเรา</span></div></a></li>
-                <li><a href="rooms.html"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>ห้องเช่า</span></div></a></li>
-                <li><a href="news.html"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>แนะนำ</span></div></a></li>
-                <li><a href="contact.html"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>ติดต่อเรา</span></div></a></li>
+                <li class=""><a href="index.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>หน้าแรก</span></div></a></li>
+                <li><a href="about.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>เกี่ยวกับเรา</span></div></a></li>
+                <li><a href="rooms.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>ห้องเช่า</span></div></a></li>
+                <li><a href="news.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>แนะนำ</span></div></a></li>
+                <li><a href="contact.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>ติดต่อเรา</span></div></a></li>
               </ul>
             </nav>
             <a href="#" class="button_container header_button ml-auto"><div class="button text-center"><span>จองห้องพัก</span></div></a>

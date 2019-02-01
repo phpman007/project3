@@ -74,8 +74,13 @@ $result = $con->query($sql);
                 <table class="table">
                   <thead class="thead-light">
                     <tr>
-                      <th>#</th>
-                      <th>ประเภท</th>
+                      <th>รหัสอ้างอิง</th>
+                      <th>ห้อง</th>
+                      <th>ชั้น</th>
+                      <th>ค่าเช่า/เดือน</th>
+                      <th>ค่าเช่า/วัน</th>
+                      <th>หน่วยน้ำ</th>
+                      <th>หน่วยไฟฟ้า</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -88,10 +93,15 @@ $result = $con->query($sql);
                     <?php while ($re = mysqli_fetch_assoc($result)) {?>
                       <tr>
                         <th scope="row"><?php echo $re['id'] ?></th>
-                        <td><?php echo $re['name'] ?></td>
+                        <td><?php echo $re['room_name'] ?></td>
+                        <td><?php echo $re['floor'] ?></td>
+                        <td><?php echo $re['price_month'] ?></td>
+                        <td><?php echo $re['price_day'] ?></td>
+                        <td><?php echo $re['meter_water'] ?></td>
+                        <td><?php echo $re['meter_light'] ?></td>
                         <td>
-                          <a href="room-type-form.php?action=edit&uid=<?php echo $re['id'] ?>" class="btn btn-sm btn-info">แก้ไข</a>
-                          <a onclick="if(!confirm('ยืนยันการทำรายการ ลบข้อมูลหรือไม่')) return false" href="room-type-form.php?action=delete&uid=<?php echo $re['id'] ?>" class="btn btn-sm btn-danger">ลบ</a>
+                          <a href="room-form.php?action=edit&uid=<?php echo $re['id'] ?>" class="btn btn-sm btn-info">แก้ไข</a>
+                          <a onclick="if(!confirm('ยืนยันการทำรายการ ลบข้อมูลหรือไม่')) return false" href="room-form.php?action=delete&uid=<?php echo $re['id'] ?>" class="btn btn-sm btn-danger">ลบ</a>
                         </td>
                       </tr>
                     <?php } ?>
@@ -109,8 +119,8 @@ $result = $con->query($sql);
 
                 <!-- Pagination -->
                 <?php for($i=1;$i<=$total_page;$i++){ ?>
-                <li class="paginate_button page-item">
-                  <a href="users.php?page=<?php echo $i; ?>" aria-controls="datatable" data-dt-idx="0" tabindex="0" class="page-link"><?php echo $i; ?></a>
+                <li class="paginate_button page-item <?php echo ($i == $_GET['page']) ? "active" : "" ?>">
+                  <a href="rooms-manager.php?page=<?php echo $i; ?>" aria-controls="datatable" data-dt-idx="0" tabindex="0" class="page-link"><?php echo $i; ?></a>
                 </li>
                 <?php } ?>
                 <!-- End Paginate -->

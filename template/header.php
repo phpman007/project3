@@ -14,11 +14,14 @@
 
 <style>
 body, h2, h3{
-  font-family: 'Mitr', sans-serif;
+  font-family: 'Mitr', sans-serif !important;
 }
 
 .main_nav ul li a div span {
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+}
+.home_title, .home_subtitle{
+  
 }
 </style>
