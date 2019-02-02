@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
-
+    // Action Update
   if ($_GET['action'] == "edit" && !empty($_GET['uid']) ) {
 
     // Attacement Image thumbnail
@@ -56,9 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
       $_POST['thumbnail'] = $row[0];
     }
+
     foreach ($_FILES['album']['tmp_name'] as $key => $value) {
 
-      if ($value['error'] != 4) {
+      if ($_FILES['album']['error'][$key] != 4) {
 
         $target_dir = "uploads/rooms/photo/";
 
@@ -75,7 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
       }
   }
 
-    $sql = sprintf("UPDATE rooms SET remark='%s', price_day='%s', price_month='%s', detail='%s', thumbnail='%s', floor='%s', room_name='%s', meter_water='%s', meter_light='%s' WHERE id = '%s'",
+    $sql = sprintf("UPDATE rooms SET type_id='%s', remark='%s', price_day='%s', price_month='%s', detail='%s', thumbnail='%s', floor='%s', room_name='%s', meter_water='%s', meter_light='%s' WHERE id = '%s'",
+    $_POST['type_id'],
     $_POST['remark'],
     $_POST['price_day'],
     $_POST['price_month'],
@@ -88,6 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $_GET['uid']
   );
 
+
+  // Action Add
   } else {
 
     // Attacement Image thumbnail
@@ -107,12 +111,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     }
 
 
-    $sql = sprintf('INSERT INTO rooms (remark, price_day,price_month, detail, thumbnail, floor, room_name, meter_water, meter_light)
-    VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')',
-      $_POST['remark'],
+
+    $sql = sprintf('INSERT INTO rooms (type_id, remark, price_day,price_month, detail, thumbnail, floor, room_name, meter_water, meter_light)
+    VALUES (\'%s\',\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')',
+      $_POST['type_id'],
+      addslashes($_POST['remark']),
       $_POST['price_day'],
       $_POST['price_month'],
-      $_POST['detail'],
+      addslashes($_POST['detail']),
       $_POST['thumbnail'],
       $_POST['floor'],
       $_POST['room_name'],
@@ -124,8 +130,31 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
   }
 
 
-$result = $con->query($sql);
+if (!$result = $con->query($sql)) {
+    $con->error;
+    exit();
+}
 
+
+$get_last_id = mysqli_insert_id($con);
+
+foreach ($_FILES['album']['tmp_name'] as $key => $value) {
+
+  if ($_FILES['album']['error'][$key] != 4) {
+
+    $target_dir = "uploads/rooms/photo/";
+
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+    $photo = $target_file = $target_dir . date('YmdHis').basename($_FILES['album']['name'][$key]);
+
+    move_uploaded_file($_FILES['album']['tmp_name'][$key], $target_file);
+    $sql = sprintf("INSERT INTO room_photos (destination, filename, room_id) VALUES ('%s', '%s', '%s')", $photo , basename($_FILES['album']['name'][$key]), $get_last_id);
+
+    $con->query($sql);
+  }
+}
   if ($_POST['btn-submit'] == 'save') {
 
         header( "location: rooms-manager.php" );
@@ -139,13 +168,19 @@ $result = $con->query($sql);
         exit(0);
 
       } else {
-        header( "location: room-form.php?uid=".mysqli_insert_id($con) );
+        header( "location: room-form.php?uid=".$get_last_id );
         exit(0);
 
       }
 
   }
 }
+
+
+// Get Type rooms
+$query = sprintf('SELECT * FROM type_room');
+
+$types = $con->query($query);
 
 
 
@@ -204,6 +239,20 @@ $result = $con->query($sql);
                     <div class="p-20">
                       <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
 
+                          <div class="form-group row">
+                            <label class="col-2 col-form-label">ประเภทห้องพัก</label>
+                            <div class="col-10">
+                                <select class="form-control" name="type_id">
+                                    <option value="">-- เลือกปรเภทห้องพัก --</option>
+                                    <?php while( $type = $types->fetch_object()) { ?>
+                                    <option <?php echo $result->type_id == $type->id ? 'selected=""' : '' ?> data-light="<?php echo $type->price_light ?>" data-water="<?php echo $type->price_water ?>" value="<?php echo $type->id ?>"><?php echo $type->name ?></option>
+                                    <?php } ?>
+                                </select>
+
+
+                            </div>
+                          </div>
+
                         <div class="form-group row">
                           <label class="col-2 col-form-label">รูปหน้าปกห้อง</label>
                           <div class="col-10">
@@ -211,7 +260,7 @@ $result = $con->query($sql);
                             <?php
                             if (!empty($result)) {
                               if (!empty($result->thumbnail)) {
-                                echo "<a target='_blank' href='{$result->thumbnail}'>ดูรูปภาพหน้าปกห้อง</a>";
+                                echo "<a data-lightbox=\"image-1\" target='_blank' href='{$result->thumbnail}'>ดูรูปภาพหน้าปกห้อง</a>";
                               }
                             }
                              ?>
@@ -227,7 +276,7 @@ $result = $con->query($sql);
                               $sql = sprintf("SELECT * FROM room_photos WHERE room_id = '%s'", $_GET['uid']);
                               $photo = $con->query($sql);
                               while ($obj = $photo->fetch_object()) {
-                                 echo "<a target='_blank' href='{$obj->destination}'>ดูรูปภาพหน้าปกห้อง | {$obj->filename}</a> | <a onclick=\"if(!confirm('ยืนยันการทำรายการ ลบข้อมูลหรือไม่')) return false\" href='delete-photo.php?uid={$obj->id}'>นำออก<a><br>";
+                                 echo "<a data-title=\"{$obj->filename}\" data-lightbox=\"image-2\" target='_blank' href='{$obj->destination}'>ดูรูปภาพหน้าปกห้อง | {$obj->filename}</a> | <a onclick=\"if(!confirm('ยืนยันการทำรายการ ลบข้อมูลหรือไม่')) return false\" href='delete-photo.php?uid={$obj->id}'>นำออก<a><br>";
                               }
 
                             }
@@ -349,6 +398,26 @@ $result = $con->query($sql);
   <!-- Plugins  -->
 
     <?php include 'template/js.php'; ?>
+    <script type="text/javascript">
+        $(function() {
+            $('select[name="type_id"]').change(function() {
 
+                var price_light = $(this).children('option:selected').data('light');
+
+                if ( typeof price_light != "undefined" ) {
+                    $('input[name="meter_light"]').val(price_light);
+                } else {
+                    $('input[name="meter_light"]').val('');
+                }
+
+                var price_water = $(this).children('option:selected').data('water');
+                if ( typeof price_water != "undefined" ) {
+                    $('input[name="meter_water"]').val(price_water);
+                } else {
+                    $('input[name="meter_water"]').val('');
+                }
+            });
+        })
+    </script>
 </body>
 </html>

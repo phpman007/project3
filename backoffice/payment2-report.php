@@ -1,6 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <?php include 'template/header.php'; ?>
+<?php include 'template/header.php'; ?>
+<?php
+$perpage = 15;
+
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+
+} else {
+  $page = 1;
+
+}
+
+if (!empty($_GET['confirm'])) {
+    $sql = sprintf("UPDATE payment SET status = 'ยืนยันการโอนเรียบร้อย' WHERE id = '%s'", $_GET['confirm']);
+
+
+    $con->query($sql);
+
+    $sql = sprintf("UPDATE booking_detail SET status = 'ยืนยันการโอนเรียบร้อย' WHERE id = '%s' AND room_id = '%s'", $_GET['booking_id'], $_GET['room_id']);
+
+
+    $con->query($sql);
+
+    $sql = sprintf("UPDATE booking SET status = 'ยืนยันการโอนเรียบร้อย' WHERE id = '%s'", $_GET['booking_id']);
+
+
+    $con->query($sql);
+
+    $sql = sprintf("UPDATE room SET status = 'มีผู้เช่าแล้ว' WHERE id = '%s'", $_GET['room_id']);
+
+
+    $con->query($sql);
+}
+
+if (!empty($_GET['cancel'])) {
+    $sql = sprintf("UPDATE payment SET status = 'จ่ายมัดจำ' WHERE id = '%s'", $_GET['cancel']);
+
+
+    $con->query($sql);
+
+    $sql = sprintf("UPDATE booking_detail SET status = 'รอชำระเงินมัดจำ' WHERE id = '%s' AND room_id = '%s'", $_GET['booking_id'], $_GET['room_id']);
+
+
+    $con->query($sql);
+    $sql = sprintf("UPDATE booking SET status = 'รอการตรวจสอบ' WHERE id = '%s'", $_GET['booking_id']);
+
+
+    $con->query($sql);
+
+    $sql = sprintf("UPDATE room SET status = 'ว่าง' WHERE id = '%s'", $_GET['room_id']);
+
+
+    $con->query($sql);
+}
+
+
+$start = ($page - 1) * $perpage;
+
+$sql = "SELECT * FROM payment WHERE invoiceStatus='จ่ายรายเดือน' OR invoiceStatus='ยืนยันการโอนเรียบร้อย' ORDER BY id desc  limit {$start} , {$perpage} ";
+
+
+$result = $con->query($sql);
+
+
+?>
 
     <body class="fixed-left">
 
@@ -52,29 +116,42 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <!-- <th>#</th> -->
-                                                <th>เลขที่ห้อง</th>
+                                                <th>ห้อง</th>
+                                                <th>สลิป</th>
                                                 <th>วันที่บันทึก</th>
-                                                <th>ค่าน้ำ/หน่วย</th>
-                                                <th>ค่าน้ำ/บาท</th>
-                                                <th>รวมค่าน้ำ</th>
-                                                <th>ค่าไฟฟ้า/หน่วย</th>
-                                                <th>ค่าไฟฟ้า/บาท</th>
-                                                <th>รวมค่าไฟฟ้า</th>
-                                                <th>รวม</th>
+                                                <th>ชำระโดย</th>
+                                                <th>จำนวนเงิน</th>
+                                                <th>ยืนยัน</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php while ($result = mysqli_fetch_assoc($result)) { ?>
+                                            <?php while ($item = $result->fetch_object()) { ?>
                                             <tr>
-                                              <td>เลขที่ห้อง</td>
-                                              <td>วันที่บันทึก</td>
-                                              <td>ค่าน้ำ/หน่วย</td>
-                                              <td>ค่าน้ำ/บาท</td>
-                                              <td>รวมค่าน้ำ</td>
-                                              <td>ค่าไฟฟ้า/หน่วย</td>
-                                              <td>ค่าไฟฟ้า/บาท</td>
-                                              <td>รวมค่าไฟฟ้า</td>
-                                              <td>รวม</td>
+                                              <td>
+                                                  <?php
+
+                                                  $sql = sprintf("SELECT * FROM rooms WHERE id='%s'", $item->room_id);
+
+
+                                                  $room = $con->query($sql)->fetch_object();
+
+                                                  echo $room->room_name;
+
+                                                   ?>
+                                              </td>
+                                              <td><a data-lightbox="image-1" href="<?php echo __ROOT__ ?>/<?php echo $item->image ?>">View</a> </td>
+                                              <td><?php echo $item->invoiceDate ?></td>
+
+                                              <td> <?php echo $item->name_pay ?></td>
+                                              <td><?php echo number_format($item->price, 0) ?></td>
+                                              <td>
+                                                  <?php if ($item->status !='ยืนยันการโอนเรียบร้อย'): ?>
+                                                      <a href="payment1-report.php?room_id=<?php echo $item->room_id ?>&booking_id=<?php echo $item->booking_id ?>&confirm=<?php echo $item->id ?>">ยืนยันรายการ</a>
+                                                <?php else: ?>
+                                                    <a href="payment1-report.php?room_id=<?php echo $item->room_id ?>&booking_id=<?php echo $item->booking_id ?>&cancel=<?php echo $item->id ?>">ยกเลิก</a>
+                                                  <?php endif; ?>
+
+                                              </td>
                                             </tr>
                                              <?php } ?>
                                         </tbody>
@@ -111,22 +188,8 @@
         </script>
 
         <!-- Plugins  -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/popper.min.js"></script><!-- Popper for Bootstrap -->
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/detect.js"></script>
-        <script src="assets/js/fastclick.js"></script>
-        <script src="assets/js/jquery.slimscroll.js"></script>
-        <script src="assets/js/jquery.blockUI.js"></script>
-        <script src="assets/js/waves.js"></script>
-        <script src="assets/js/wow.min.js"></script>
-        <script src="assets/js/jquery.nicescroll.js"></script>
-        <script src="assets/js/jquery.scrollTo.min.js"></script>
-        <script src="../plugins/switchery/switchery.min.js"></script>
 
-        <!-- Custom main Js -->
-        <script src="assets/js/jquery.core.js"></script>
-        <script src="assets/js/jquery.app.js"></script>
+                    <?php include 'template/js.php'; ?>
 
     </body>
 </html>

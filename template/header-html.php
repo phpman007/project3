@@ -32,9 +32,9 @@
                 <li><a href="contact.php"><div class="nav_item d-flex flex-column align-items-center justify-content-center"><span>ติดต่อเรา</span></div></a></li>
               </ul>
             </nav>
-            <a href="#" class="button_container header_button ml-auto"><div class="button text-center"><span>จองห้องพัก</span></div></a>
+            <a href="booking.php" class="button_container header_button ml-auto"><div class="button text-center"><span>จองห้องพัก</span></div></a>
             <div class="hamburger ml-auto"><i class="fa fa-bars" aria-hidden="true"></i></div>
-            <div class="header_review"><a href="#">แสดงความคิดเห็น</a></div>
+            <!-- <div class="header_review"><a href="#">แสดงความคิดเห็น</a></div> -->
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ $member = $_SESSION['member'];
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/lightbox.min.css" rel="stylesheet" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/summernote/summernote.css" />
     <script src="assets/js/modernizr.min.js"></script>

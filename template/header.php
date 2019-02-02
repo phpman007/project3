@@ -22,6 +22,16 @@ body, h2, h3{
     font-weight: 400 !important;
 }
 .home_title, .home_subtitle{
-  
+
+}
+.intro_img {
+	max-width: 347px !important;
+}
+.section_subtitle {
+    font-size: 20px !important;
+}
+.home_subtitle {
+    font-size: 23px !important;
+
 }
 </style>

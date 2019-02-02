@@ -35,6 +35,16 @@
                         <i class="mdi mdi-account-multiple"></i><span> จัดการผู้เช่า </span>
                     </a>
                 </li>
+                <li>
+                    <a href="slide.php" class="waves-effect waves-primary">
+                        <i class="mdi mdi-account-multiple"></i><span> สไลด์หน้าเว็บ </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="article.php" class="waves-effect waves-primary">
+                        <i class="mdi mdi-account-multiple"></i><span> จัดการบทความ </span>
+                    </a>
+                </li>
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect waves-primary ">
                         <i class="mdi mdi-home-modern"></i><span> ห้องพัก </span> <span class="menu-arrow"></span>
@@ -45,7 +55,7 @@
                         <li><a href="room-type.php">จัดการประเภทห้องพัก</a></li>
                     </ul>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="report-rent-room.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-printer"></i><span> รายงานสัญญาเช่า </span>
                     </a>
@@ -54,7 +64,7 @@
                     <a href="report-elect.php" class="waves-effect waves-primary">
                         <i class="mdi mdi-printer"></i><span> รายงานค่าน้ำ ค่าไฟฟ้า </span>
                     </a>
-                </li>
+                </li> -->
 
             </ul>
 

@@ -1,9 +1,17 @@
+<?php error_reporting(0); ?>
 <?php include "config/db.conf.php" ?>
+<?php include "connection/connection.php" ?>
+
+<?php
+	$rooms = sprintf('SELECT * FROM rooms ORDER BY RAND() LIMIT 5');
+	$rooms = $con->query($rooms);
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <title>Samira</title>
 <?php include "template/header.php" ?>
+
 </head>
 <body>
 
@@ -26,62 +34,33 @@
 		<div class="home_slider_container">
 			<div class="owl-carousel owl-theme home_slider">
 
-				<!-- Slide -->
-				<div class="owl-item">
-					<!-- Image credit: https://unsplash.com/@santtd -->
-					<div class="background_image" style="background-image:url(assets/images/home_slider_1.jpg)"></div>
-					<div class="home_content_container">
-						<div class="container">
-							<div class="row">
-								<div class="col">
-									<div class="home_content text-center">
-										<div class="home_subtitle">luxury resort</div>
-										<div class="home_title">Amazing Services, Location & Facilities</div>
-										<a href="#" class="button_container home_button"><div class="button text-center"><span>จองห้องพัก</span></div></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<?php
 
+				$slides = $con->query('SELECT * FROM slide ORDER BY id desc LIMIT 5 ');
+				$num_slides = $slides;
+				 ?>
 				<!-- Slide -->
+				<?php while($slide = $slides->fetch_object()) { ?>
 				<div class="owl-item">
 					<!-- Image credit: https://unsplash.com/@santtd -->
-					<div class="background_image" style="background-image:url(assets/images/home_slider_1.jpg)"></div>
+					<div class="background_image" style="background-image:url(backoffice/<?php echo $slide->image ?>)"></div>
 					<div class="home_content_container">
 						<div class="container">
 							<div class="row">
 								<div class="col">
 									<div class="home_content text-center">
-										<div class="home_subtitle">luxury resort</div>
-										<div class="home_title">Amazing Services, Location & Facilities</div>
-										<a href="#" class="button_container home_button"><div class="button text-center"><span>จองห้องพัก</span></div></a>
+										<div class="home_subtitle"><?php echo $slide->title_field ?></div>
+										<div class="home_title"><?php echo $slide->text_field ?></div>
+										<a href="<?php echo $slide->url ?>" class="button_container home_button"><div class="button text-center"><span>ดูเพิ่มเติม</span></div></a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<?php } ?>
 
-				<!-- Slide -->
-				<div class="owl-item">
-					<!-- Image credit: https://unsplash.com/@santtd -->
-					<div class="background_image" style="background-image:url(assets/images/home_slider_1.jpg)"></div>
-					<div class="home_content_container">
-						<div class="container">
-							<div class="row">
-								<div class="col">
-									<div class="home_content text-center">
-										<div class="home_subtitle">luxury resort</div>
-										<div class="home_title">Amazing Services, Location & Facilities</div>
-										<a href="#" class="button_container home_button"><div class="button text-center"><span>จองห้องพัก</span></div></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+
 
 			</div>
 
@@ -89,9 +68,12 @@
 
 			<div class="home_slider_dots">
 				<ul id="home_slider_custom_dots" class="home_slider_custom_dots">
-					<li class="home_slider_custom_dot active">01</li>
-					<li class="home_slider_custom_dot">02</li>
-					<li class="home_slider_custom_dot">03</li>
+					<?php
+					$i = 0;
+					$slides = $con->query('SELECT * FROM slide ORDER BY id desc LIMIT 5 ');
+					while($num_slide = $slides->fetch_object()) { ?>
+					<li class="home_slider_custom_dot <?php echo $i == 0 ? 'active' : '' ?>">0<?php echo ++$i ?></li>
+					<?php } ?>
 				</ul>
 			</div>
 
@@ -113,14 +95,23 @@
 					<div class="intro_container d-flex flex-column align-items-start justify-content-center magic_up">
 						<div class="intro_content">
 							<div class="section_title_container">
-								<div class="section_subtitle">luxury resort</div>
-								<div class="section_title"><h2>Relax in our Hotel</h2></div>
+								<div class="section_subtitle">
+									<?php
+
+									// get Room 1
+									$room = $rooms->fetch_object();
+
+									$type = $con->query(sprintf("SELECT * FROM type_room WHERE id = '%s'", $room->type_id))->fetch_object();
+
+									echo $type->name;
+									 ?>
+								</div>
+								<div class="section_title"><h2><?php echo $room->room_name ?></h2></div>
 							</div>
 							<div class="intro_text">
-								<p>Praesent fermentum ligula in dui imperdiet, vel tempus nulla ultricies. Phasellus at commodo ligula. Nullam molestie volutpat sapien, a dignissim tortor laoreet quis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+								<p><?php echo $room->detail ?></p>
 							</div>
-							<div class="intro_link"><a href="rooms.html">View Rooms</a></div>
-							<a href="#" class="button_container intro_button"><div class="button text-center"><span>จองห้องพัก</span></div></a>
+							<div class="intro_link"><a href="room-detail.php?id=<?php echo $room->id ?>">ดูห้อง</a></div>
 						</div>
 					</div>
 				</div>
@@ -128,12 +119,14 @@
 				<!-- Intro Image -->
 				<div class="col-lg-7 intro_col">
 					<div class="intro_images magic_up">
-						<!-- Image credit: https://unsplash.com/@yuni_ladyday2 -->
-						<div class="intro_1 intro_img"><img src="assets/images/intro_1.jpg" alt=""></div>
-						<!-- Image credit: https://unsplash.com/@liliane -->
-						<div class="intro_2 intro_img"><img src="assets/images/intro_2.jpg" alt=""></div>
-						<!-- Image credit: https://unsplash.com/@brucemars -->
-						<div class="intro_3 intro_img"><img src="assets/images/intro_3.jpg" alt=""></div>
+						<?php
+
+						$photos = $con->query(sprintf("SELECT * FROM room_photos WHERE room_id = '%s' ORDER BY RAND() LIMIT 3", $room->id));
+						$i = 0 ;
+						 ?>
+						 <?php while($photo = $photos->fetch_object()) { ?>
+						<div class="intro_<?php echo ++$i; ?> intro_img"><img src="backoffice\<?php echo $photo->destination ?>" alt=""></div>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
@@ -150,24 +143,23 @@
 
 						<!-- Big Room SLider -->
 						<div class="owl-carousel owl-theme big_room_slider">
+							<?php
 
-							<!-- Slide -->
-							<div class="owl-item">
-								<!-- Image credit: https://unsplash.com/@jbriscoe -->
-								<div class="background_image" style="background-image:url(assets/images/img_1.jpg)"></div>
-							</div>
+							// get Room 1
+							$room = $rooms->fetch_object();
 
-							<!-- Slide -->
-							<div class="owl-item">
-								<!-- Image credit: https://unsplash.com/@jbriscoe -->
-								<div class="background_image" style="background-image:url(assets/images/img_1.jpg)"></div>
-							</div>
+							$photos = $con->query(sprintf("SELECT * FROM room_photos WHERE room_id = '%s'", $room->id));
+							 ?>
+							 <?php while($photo = $photos->fetch_object()) { ?>
 
-							<!-- Slide -->
 							<div class="owl-item">
-								<!-- Image credit: https://unsplash.com/@jbriscoe -->
-								<div class="background_image" style="background-image:url(assets/images/img_1.jpg)"></div>
+								<div class="background_image" style="background-image:url(backoffice/<?php echo $photo->destination ?>)"></div>
 							</div>
+							<!-- Slide -->
+							<?php } ?>
+
+
+
 
 						</div>
 
@@ -181,27 +173,25 @@
 					<div class="big_room_content">
 						<div class="big_room_content_inner magic_up">
 							<div class="section_title_container">
-								<div class="section_subtitle">luxury resort</div>
-								<div class="section_title"><h2>Rooms with private swimming pool</h2></div>
+								<div class="section_subtitle">
+									<?php
+
+
+									$type = $con->query(sprintf("SELECT * FROM type_room WHERE id = '%s'", $room->type_id))->fetch_object();
+
+									echo $type->name;
+									 ?>
+								</div>
+								<div class="section_title"><h2><?php echo $room->room_name ?></h2></div>
 							</div>
 							<div class="big_room_text">
-								<p>Praesent fermentum ligula in dui imperdiet, vel tempus nulla ultricies. Phasellus at commodo ligula. Nullam molestie volutpat sapien, a dignissim tortor laoreet quis. Class aptent taciti sociosqu ad litora torquent per conubia nostra. Phasellus at commodo ligula. Nullam molestie volutpat sapien, a dignissim tortor  per inceptos himenaeos laoreet quis. Class aptent taciti soci osqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+								<p><?php echo $room->detail ?></p>
+								<div class="intro_link"><a style="color:#fff" href="room-detail.php?id=<?php echo $room->id ?>">ดูห้อง</a></div>
 							</div>
 							<div class="testimonial">
-								<div class="testimonial_stars">
-									<ul class="d-flex flex-row align-items-start justfy-content-start">
-										<li><i class="fa fa-star" aria-hidden="true"></i></li>
-										<li><i class="fa fa-star" aria-hidden="true"></i></li>
-										<li><i class="fa fa-star" aria-hidden="true"></i></li>
-										<li><i class="fa fa-star" aria-hidden="true"></i></li>
-										<li><i class="fa fa-star" aria-hidden="true"></i></li>
-									</ul>
-								</div>
 
-								<div class="testimonial_author d-flex flex-row align-items-center justify-content-start">
-									<div class="testimonial_author_image"><img src="assets/images/testimonial.png" alt=""></div>
-									<div class="testimonial_author_name"><a href="#">Michael Smith</a><span>, Client</span></div>
-								</div>
+
+
 							</div>
 						</div>
 
@@ -218,60 +208,35 @@
 			<div class="row">
 				<div class="col">
 					<div class="section_title_container text-center magic_up">
-						<div class="section_subtitle">luxury resort</div>
-						<div class="section_title"><h2>Choose a Room</h2></div>
+						<div class="section_subtitle">รายการที่อาจสนใจ</div>
+						<div class="section_title"><h2>เลือกห้อง</h2></div>
 					</div>
 				</div>
 			</div>
 			<div class="row room_row magic_up">
-
+				<?php while($room = $rooms->fetch_object()) { ?>
 				<!-- Room -->
 				<div class="col-lg-4 room_col">
 					<div class="room">
-						<div class="room_image"><img src="assets/images/room_1.jpg" alt="https://unsplash.com/@jonathan_percy"></div>
+						<div class="room_image"><img src="backoffice/<?php echo $room->thumbnail ?>" ></div>
 						<div class="room_content text-center">
-							<div class="room_price">From $90 / <span>Night</span></div>
-							<div class="room_type">double</div>
-							<div class="room_title"><a href="rooms.html">Deluxe Suite</a></div>
-							<div class="room_text">
-								<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-							</div>
-							<a href="#" class="button_container room_button"><div class="button text-center"><span>Book Now</span></div></a>
-						</div>
-					</div>
-				</div>
+							<div class="room_price"><?php echo number_format($room->price_day , 0) ?> / <span>วัน</span></div>
+							<div class="room_type">
+								<?php
+								$type = $con->query(sprintf("SELECT * FROM type_room WHERE id = '%s'", $room->type_id))->fetch_object();
 
-				<!-- Room -->
-				<div class="col-lg-4 room_col">
-					<div class="room">
-						<div class="room_image"><img src="assets/images/room_2.jpg" alt="https://unsplash.com/@ultralinx"></div>
-						<div class="room_content text-center">
-							<div class="room_price">From $90 / <span>Night</span></div>
-							<div class="room_type">single</div>
-							<div class="room_title"><a href="rooms.html">Luxury Suite</a></div>
-							<div class="room_text">
-								<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
+								echo $type->name;
+								 ?>
 							</div>
-							<a href="#" class="button_container room_button"><div class="button text-center"><span>Book Now</span></div></a>
+							<div class="room_title"><a href="rooms.html"><?php echo $room->room_name ?></a></div>
+							<div class="room_text">
+								<p><?php echo $room->detail ?></p>
+							</div>
+							<a href="room-detail.php?id=<?php echo $room->id ?>" class="button_container room_button"><div class="button text-center"><span>จองเลย</span></div></a>
 						</div>
 					</div>
 				</div>
-
-				<!-- Room -->
-				<div class="col-lg-4 room_col">
-					<div class="room">
-						<div class="room_image"><img src="assets/images/room_3.jpg" alt="https://unsplash.com/@rhemakallianpur"></div>
-						<div class="room_content text-center">
-							<div class="room_price">From $90 / <span>Night</span></div>
-							<div class="room_type">double</div>
-							<div class="room_title"><a href="rooms.html">Deluxe Suite</a></div>
-							<div class="room_text">
-								<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-							</div>
-							<a href="#" class="button_container room_button"><div class="button text-center"><span>Book Now</span></div></a>
-						</div>
-					</div>
-				</div>
+			<?php } ?>
 
 			</div>
 		</div>
@@ -284,26 +249,18 @@
 
 			<!-- Gallery Slider -->
 			<div class="owl-carousel owl-theme gallery_slider magic_up">
+				<?php
+				$photo_all = $con->query('SELECT room_photos.* FROM room_photos, rooms WHERE room_photos.room_id = rooms.id order by RAND() LIMIT 10');
+
+				 ?>
+				 <?php while($photo1 = $photo_all->fetch_object()) { ?>
 				<div class="owl-item gallery_item">
 					<div class="gallery_select d-flex flex-column align-items-center justify-content-center"><div>+</div></div>
-					<a class="colorbox" href="assets/images/gallery_1.jpg"><img src="assets/images/gallery_1.jpg" alt=""></a>
+					<a class="colorbox" href="backoffice/<?php echo $photo1->destination ?>"><img src="backoffice/<?php echo $photo1->destination ?>" alt=""></a>
 				</div>
-				<div class="owl-item gallery_item">
-					<div class="gallery_select d-flex flex-column align-items-center justify-content-center"><div>+</div></div>
-					<a class="colorbox" href="assets/images/gallery_2.jpg"><img src="assets/images/gallery_2.jpg" alt=""></a>
-				</div>
-				<div class="owl-item gallery_item">
-					<div class="gallery_select d-flex flex-column align-items-center justify-content-center"><div>+</div></div>
-					<a class="colorbox" href="assets/images/gallery_3.jpg"><img src="assets/images/gallery_3.jpg" alt=""></a>
-				</div>
-				<div class="owl-item gallery_item">
-					<div class="gallery_select d-flex flex-column align-items-center justify-content-center"><div>+</div></div>
-					<a class="colorbox" href="assets/images/gallery_4.jpg"><img src="assets/images/gallery_4.jpg" alt=""></a>
-				</div>
-				<div class="owl-item gallery_item">
-					<div class="gallery_select d-flex flex-column align-items-center justify-content-center"><div>+</div></div>
-					<a class="colorbox" href="assets/images/gallery_5.jpg"><img src="assets/images/gallery_5.jpg" alt=""></a>
-				</div>
+				<?php } ?>
+
+
 			</div>
 
 		</div>
@@ -326,32 +283,6 @@
 
 	<!-- Newsletter -->
 
-	<div class="newsletter">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-5">
-					<div class="newsletter_content">
-						<div class="section_title_container">
-							<!-- <div class="section_subtitle">luxury resort</div> -->
-							<div class="section_title"><h3>สมัครรับจดหมายข่าว</h3></div>
-						</div>
-						<div class="newsletter_text">
-							<p>Praesent fermentum ligula in dui imperdiet, vel tempus nulla ultricies. Phasellus at commodo ligula. Nullam molestie volutp at sapien.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-7">
-					<div class="newsletter_form_container">
-						<form action="#" id="newsletter_form" class="newsletter_form">
-							<input type="email" class="newsletter_input" placeholder="Your e-mail" required="required">
-							<button class="newsletter_button"><span>Subscribe</span></button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="newsletter_border_container"><div class="container"><div class="row border_row"><div class="col"><div class="newsetter_border"></div></div></div></div></div>
-	</div>
 
 	<!-- Footer -->
 <?php include "template/footer.php" ?>

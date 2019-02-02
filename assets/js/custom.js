@@ -20,7 +20,7 @@ $(document).ready(function()
 {
 	"use strict";
 
-	/* 
+	/*
 
 	1. Vars and Inits
 
@@ -50,7 +50,7 @@ $(document).ready(function()
 	initLightbox();
 	initMagic();
 
-	/* 
+	/*
 
 	2. Set Header
 
@@ -68,7 +68,7 @@ $(document).ready(function()
 		}
 	}
 
-	/* 
+	/*
 
 	3. Init Menu
 
@@ -106,7 +106,7 @@ $(document).ready(function()
 		menuActive = false;
 	}
 
-	/* 
+	/*
 
 	4. Init Home Slider
 
@@ -117,7 +117,7 @@ $(document).ready(function()
 		if($('.home_slider').length)
 		{
 			var homeSlider = $('.home_slider');
-			
+
 			homeSlider.owlCarousel(
 			{
 				items:1,
@@ -150,7 +150,7 @@ $(document).ready(function()
 		}
 	}
 
-	/* 
+	/*
 
 	5. Init Big Room Slider
 
@@ -192,7 +192,7 @@ $(document).ready(function()
 		}
 	}
 
-	/* 
+	/*
 
 	6. Init Gallery Slider
 
@@ -253,8 +253,6 @@ $(document).ready(function()
 		{
 			$('.colorbox').colorbox(
 			{
-				rel:'colorbox',
-				photo: true,
 				maxWidth:'95%',
 				maxHeight:'95%',
 			});
@@ -283,7 +281,7 @@ $(document).ready(function()
 		    		reverse:false
 		    	})
 		    	.setTween(TweenMax.from(ele, 1, {y:200, autoAlpha:0, ease: Circ.easeOut, delay:0.3}))
-		    	.addTo(ctrl);	
+		    	.addTo(ctrl);
 	    	});
 		}
 	}

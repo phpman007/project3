@@ -14,6 +14,7 @@
 <!-- Custom main Js -->
 <script src="assets/js/jquery.core.js"></script>
 <script src="assets/js/jquery.app.js"></script>
+<script src="assets/js/lightbox.min.js"></script>
 <script src="assets/summernote/summernote.js"></script>
 
 <script type="text/javascript">

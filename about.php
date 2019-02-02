@@ -1,4 +1,13 @@
+<?php error_reporting(0); ?>
 <?php include "config/db.conf.php" ?>
+<?php include "connection/connection.php" ?>
+
+
+<?php
+
+$article = sprintf('SELECT * FROM article WHERE id = 3 LIMIT 1');
+$article = $con->query($article)->fetch_object();
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,27 +93,11 @@
   			<div class="row">
 
   				<!-- Intro Content -->
-  				<div class="col-lg-5 intro_col">
-  					<div class="intro_container d-flex flex-column align-items-start justify-content-center magic_up">
-  						<div class="intro_content">
-  							<div class="section_title_container">
-  								<div class="section_subtitle">luxury resort</div>
-  								<div class="section_title"><h2>About the Samira</h2></div>
-  							</div>
-  							<div class="intro_text">
-  								<p>Praesent fermentum ligula in dui imperdiet, vel tempus nulla ultricies. Phasellus at commodo ligula. Nullam molestie volutpat sapien, a dignissim tortor laoreet quis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-  							</div>
-  							</div>
-  					</div>
+  				<div class="col-lg-12 intro_col">
+  					<?php echo $article->desc_full ?>
   				</div>
 
-  				<!-- Intro Image -->
-  				<div class="col-lg-7 intro_col">
-  					<div class="intro_image magic_up">
-  						<!-- Image credit: https://unsplash.com/@ibrahimboran -->
-  						<img src="assets/images/about_intro.jpg" alt="">
-  					</div>
-  				</div>
+
   			</div>
   		</div>
   	</div>

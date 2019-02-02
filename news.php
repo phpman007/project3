@@ -1,4 +1,30 @@
+
+<?php error_reporting(0); ?>
 <?php include "config/db.conf.php" ?>
+<?php include "connection/connection.php" ?>
+
+<?php
+$perpage = 15;
+
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+
+} else {
+  $page = 1;
+
+}
+
+
+$start = ($page - 1) * $perpage;
+$sql = "SELECT * FROM article WHERE type = 1 limit {$start} , {$perpage} ";
+
+
+$result = $con->query($sql);
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,67 +72,41 @@
 				<div class="col">
 
 					<div class="blog_post_container">
-
+						<?php while ($results = $result->fetch_object()) { ?>
 						<!-- Blog Post - Image Top -->
 						<div class="blog_post blog_image_top magic_up">
-							<div class="blog_image"><img src="assets/images/blog_1.jpg" alt=""></div>
+							<div class="blog_image"><img src="backoffice/<?php echo $results->thumbnail ?>" alt=""></div>
 							<div class="blog_post_content">
-								<div class="blog_post_category">hotel</div>
-								<div class="blog_post_title"><a href="#">A new Swimming Pool</a></div>
+								<div class="blog_post_title"><a href="article-detail.php?id=<?php echo $results->id ?>"><?php echo $results->title ?></a></div>
 								<div class="blog_post_text">
-									<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
+									<p><?php echo $results->desc_shrt ?></p>
 								</div>
-								<a href="#" class="button_container blog_button ml-auto"><div class="button text-center"><span>Read More</span></div></a>
+								<a href="article-detail.php?id=<?php echo $results->id ?>" class="button_container blog_button ml-auto"><div class="button text-center"><span>อ่านต่อ</span></div></a>
 							</div>
 						</div>
-						<div class="blog_post blog_image_top magic_up">
-							<div class="blog_image"><img src="assets/images/blog_1.jpg" alt=""></div>
-							<div class="blog_post_content">
-								<div class="blog_post_category">hotel</div>
-								<div class="blog_post_title"><a href="#">A new Swimming Pool</a></div>
-								<div class="blog_post_text">
-									<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-								</div>
-								<a href="#" class="button_container blog_button ml-auto"><div class="button text-center"><span>Read More</span></div></a>
-							</div>
-						</div>
-						<div class="blog_post blog_image_top magic_up">
-							<div class="blog_image"><img src="assets/images/blog_1.jpg" alt=""></div>
-							<div class="blog_post_content">
-								<div class="blog_post_category">hotel</div>
-								<div class="blog_post_title"><a href="#">A new Swimming Pool</a></div>
-								<div class="blog_post_text">
-									<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-								</div>
-								<a href="#" class="button_container blog_button ml-auto"><div class="button text-center"><span>Read More</span></div></a>
-							</div>
-						</div>
-						<div class="blog_post blog_image_top magic_up">
-							<div class="blog_image"><img src="assets/images/blog_1.jpg" alt=""></div>
-							<div class="blog_post_content">
-								<div class="blog_post_category">hotel</div>
-								<div class="blog_post_title"><a href="#">A new Swimming Pool</a></div>
-								<div class="blog_post_text">
-									<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-								</div>
-								<a href="#" class="button_container blog_button ml-auto"><div class="button text-center"><span>Read More</span></div></a>
-							</div>
-						</div>
-						<div class="blog_post blog_image_top magic_up">
-							<div class="blog_image"><img src="assets/images/blog_1.jpg" alt=""></div>
-							<div class="blog_post_content">
-								<div class="blog_post_category">hotel</div>
-								<div class="blog_post_title"><a href="#">A new Swimming Pool</a></div>
-								<div class="blog_post_text">
-									<p>Praesent fermentum ligula in dui imper diet, vel tempus nulla ultricies. Phasellus at commodo ligula.</p>
-								</div>
-								<a href="#" class="button_container blog_button ml-auto"><div class="button text-center"><span>Read More</span></div></a>
-							</div>
-						</div>
+						<?php } ?>
+
 
 
 					</div>
+					<?php
+	                 $sql2 = "SELECT * FROM article WHERE type =1  ";
+	                 $query2 = mysqli_query($con, $sql2);
+	                 $total_record = mysqli_num_rows($query2);
+	                 $total_page = ceil($total_record / $perpage);
+	                 ?>
 
+	                <ul class="pagination">
+
+	                  <!-- Pagination -->
+	                  <?php for($i=1;$i<=$total_page;$i++){ ?>
+	                  <li class="paginate_button page-item">
+	                    <a href="users.php?page=<?php echo $i; ?>" aria-controls="datatable" data-dt-idx="0" tabindex="0" class="page-link"><?php echo $i; ?></a>
+	                  </li>
+	                  <?php } ?>
+	                  <!-- End Paginate -->
+
+	                </ul>
 				</div>
 			</div>
 
