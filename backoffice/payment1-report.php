@@ -159,7 +159,7 @@ $result = $con->query($sql);
                                     </table>
                                 </div>
                                 <?php
-                                 $sql2 = "SELECT * from payment  WHERE status='จ่ายมัดจำ'";
+                                 $sql2 = "SELECT * from payment  WHERE invoiceStatus='จ่ายมัดจำ'";
                                  $query2 = mysqli_query($con, $sql2);
                                  $total_record = mysqli_num_rows($query2);
                                  $total_page = ceil($total_record / $perpage);

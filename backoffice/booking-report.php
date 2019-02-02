@@ -3,7 +3,26 @@
     <!-- https://www.facebook.com/atallproject/ -->
     <!-- AllProject - รับทำเว็บไซต์ เขียนโปรแกรม ออกแบบเว็บไซต์ ทำการตลาดออนไลน์ -->
     <?php include 'template/header.php'; ?>
+    <?php
+    $perpage = 15;
 
+    if (isset($_GET['page'])) {
+      $page = $_GET['page'];
+
+    } else {
+      $page = 1;
+
+    }
+
+    $start = ($page - 1) * $perpage;
+
+    $sql = "SELECT * FROM booking_detail WHERE status='รอชำระเงินมัดจำ' ORDER BY id desc  limit {$start} , {$perpage} ";
+
+
+    $result = $con->query($sql);
+
+
+    ?>
     <body class="fixed-left">
 
         <!-- Begin page -->
@@ -54,28 +73,54 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <!-- <th>#</th> -->
-                                                <th>ชื่อ</th>
-                                                <th>สกุล</th>
-                                                <th>เลขห้อง</th>
-                                                <th>แก้ไข</th>
-                                                <th>ลบ</th>
+                                                <th>ห้อง</th>
+                                                <th>จำนวนเงินมัดจำ</th>
+                                                <th>จำนวนเงินเช่า</th>
+                                                <th>วันที่เข้า</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php while ($result = mysqli_fetch_assoc($result)) { ?>
+                                            <?php while ($item = $result->fetch_object()) { ?>
                                             <tr>
                                                 <!-- <th scope="row">1</th> -->
-                                                <td><?php echo $result['firstname'] ?></td>
-                                                <td><?php echo $result['lastname'] ?></td>
-                                                <td><?php echo $result['card_number'] ?></td>
-                                                <td>แก้ไข</td>
-                                                <td>ลบ</td>
+                                                <td>
+                                                    <?php
+
+                                                    $sql = sprintf("SELECT * FROM rooms WHERE id='%s'", $item->room_id);
+
+
+                                                    $room = $con->query($sql)->fetch_object();
+
+                                                    echo $room->room_name;
+
+                                                     ?>
+                                                </td>
+                                                <td><?php echo number_format($item->deposit,0) ?></td>
+                                                <td><?php echo number_format($item->total,0) ?></td>
+                                                <td><?php echo $item->checkin_date ?></td>
                                             </tr>
                                              <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
+                                <?php
+                                 $sql2 = "SELECT * FROM booking_detail WHERE status='รอชำระเงินมัดจำ'";
+                                 $query2 = mysqli_query($con, $sql2);
+                                 $total_record = mysqli_num_rows($query2);
+                                 $total_page = ceil($total_record / $perpage);
+                                 ?>
 
+                                <ul class="pagination">
+
+                                  <!-- Pagination -->
+                                  <?php for($i=1;$i<=$total_page;$i++){ ?>
+                                  <li class="paginate_button page-item">
+                                    <a href="payment1-report.php?page=<?php echo $i; ?>" aria-controls="datatable" data-dt-idx="0" tabindex="0" class="page-link"><?php echo $i; ?></a>
+                                  </li>
+                                  <?php } ?>
+                                  <!-- End Paginate -->
+
+                                </ul>
                             </div>
                         </div>
                     </div>

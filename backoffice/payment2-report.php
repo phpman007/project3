@@ -157,7 +157,24 @@ $result = $con->query($sql);
                                         </tbody>
                                     </table>
                                 </div>
+                                <?php
+                                 $sql2 = "SELECT * from payment  WHERE invoiceStatus='จ่ายรายเดือน'";
+                                 $query2 = mysqli_query($con, $sql2);
+                                 $total_record = mysqli_num_rows($query2);
+                                 $total_page = ceil($total_record / $perpage);
+                                 ?>
 
+                                <ul class="pagination">
+
+                                  <!-- Pagination -->
+                                  <?php for($i=1;$i<=$total_page;$i++){ ?>
+                                  <li class="paginate_button page-item">
+                                    <a href="payment1-report.php?page=<?php echo $i; ?>" aria-controls="datatable" data-dt-idx="0" tabindex="0" class="page-link"><?php echo $i; ?></a>
+                                  </li>
+                                  <?php } ?>
+                                  <!-- End Paginate -->
+
+                                </ul>
                             </div>
                         </div>
                     </div>

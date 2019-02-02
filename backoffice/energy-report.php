@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html>
     <?php include 'template/header.php'; ?>
+    <?php
+    $perpage = 15;
 
+    if (isset($_GET['page'])) {
+      $page = $_GET['page'];
+
+    } else {
+      $page = 1;
+
+    }
+
+    $start = ($page - 1) * $perpage;
+
+    $sql = "SELECT * FROM rooms";
+
+
+    $result = $con->query($sql);
+
+
+    ?>
     <body class="fixed-left">
 
         <!-- Begin page -->
@@ -47,6 +66,8 @@
                                     <p class="text-muted font-14 m-b-20">
                                         หน้าแสดงรายการค่าน้ำ ค่าไฟฟ้าทั้งหมดของระบบ
                                     </p>
+                                    <form class=""method="post">
+
 
                                     <table class="table">
                                         <thead class="thead-light">
@@ -64,21 +85,24 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php while ($result = mysqli_fetch_assoc($result)) { ?>
+                                            <?php while ($item = $result->fetch_object()) { ?>
                                             <tr>
-                                              <td>เลขที่ห้อง</td>
-                                              <td>วันที่บันทึก</td>
-                                              <td>ค่าน้ำ/หน่วย</td>
-                                              <td>ค่าน้ำ/บาท</td>
-                                              <td>รวมค่าน้ำ</td>
-                                              <td>ค่าไฟฟ้า/หน่วย</td>
-                                              <td>ค่าไฟฟ้า/บาท</td>
-                                              <td>รวมค่าไฟฟ้า</td>
-                                              <td>รวม</td>
+                                              <td><?php echo $item->room_name ?></td>
+                                              <td><?php echo $item->updated_at ?></td>
+                                              <td><input type="text" name="" value="" style="width:60px"></td>
+                                              <td><input type="text" name="" value="<?php echo $item->meter_water ?>" style="width:60px"></td>
+                                              <td><input type="text" name="" value="" style="width:60px"></td>
+                                              <td><input type="text" name="" value="" style="width:60px"></td>
+                                              <td><input type="text" name="" value="<?php echo $item->meter_light ?>" style="width:60px"></td>
+                                              <td><input type="text" name="" value="" style="width:60px"></td>
+                                              <td><input type="text" name="" value="" style="width:60px"></td>
                                             </tr>
                                              <?php } ?>
                                         </tbody>
                                     </table>
+
+                                    <button type="submit" name="button" class="btn btn-info">บันทึกรายการ</button>
+                                    </form>
                                 </div>
 
                             </div>
